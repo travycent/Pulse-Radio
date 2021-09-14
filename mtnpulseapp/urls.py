@@ -1,21 +1,14 @@
 # mtnpulseapp/urls.py
 from django.conf.urls import url
-from django.urls import include, path
-from rest_framework import routers
-from . import views
-from django.conf.urls import url
+from django.urls import path
+from .views import ArchivesApi,LiveLinkApi,ListLiveLinkDetailApi,ArchiveDetailApi
 
-
-router = routers.DefaultRouter()
-router.register(r'livelinks', views.LiveLinkViewSet)
-router.register(r'archives', views.AchivesViewSet)
-
-
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
+#Add Our API URLS
 urlpatterns = [
-    #url(r'^login', UserLoginView.as_view()),
-    path('', include(router.urls)),
-    path('api/', include('rest_framework.urls', namespace='rest_framework')),
+    path('archives/', ArchivesApi.as_view(),name="Archives"),
+    path('archives/<int:id>/', ArchiveDetailApi.as_view(),name="Archives Detail"),
+    path('livelinks/', LiveLinkApi.as_view(),name="Live Links"),
+    path('livelinks/<int:id>/', ListLiveLinkDetailApi.as_view(),name="Live Links Detail"),
+    
     
 ]

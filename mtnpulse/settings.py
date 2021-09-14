@@ -14,6 +14,8 @@ import os #Import the OS when Setting the Media Root
 from pathlib import Path
 from datetime import timedelta
 import dj_database_url
+#Variable to change incase of deployment to webserver
+live_deploy = True
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,17 +27,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-%@7a7j-41an3us9y-44^nfc*el4s^21-=fvf2_9i-b6(bb3(h^'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['mtnpulse.herokuapp.com','127.0.0.1']
-
-
 # Application definition
 
 INSTALLED_APPS = [
     'mtnpulseapp',
-    'api',
+    'mixtapes',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -77,20 +73,36 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mtnpulse.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
+# replace variables accordingly
+if live_deploy == True:
+    DEBUG = True
+    ALLOWED_HOSTS = ['mtnpulse.herokuapp.com']
+    DATABASES = {
+        'default':
+        {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'mtn_pulse_db',
             'USER': 'root',
             'PASSWORD': 'root',
             'HOST': 'localhost',
             'PORT': '3306',
+        }
     }
-}
+elif live_deploy == False:
+    DEBUG = True
+    ALLOWED_HOSTS = ['127.0.0.1']
+    DATABASES = {
+        'default': 
+        {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'mtn_pulse_db',
+            'USER': 'root',
+            'PASSWORD': 'root',
+            'HOST': 'localhost',
+            'PORT': '3306',
+        }
+    }
+
 
 
 # Password validation
@@ -141,6 +153,44 @@ STATICFILES_DIRS = (
 
 #  Add configuration for static files storage using whitenoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Add JWT Rest Framework Authentication
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+#SIMPLE JWT Config
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer','JWT'),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
