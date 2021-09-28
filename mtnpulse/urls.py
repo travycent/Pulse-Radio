@@ -26,6 +26,7 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     #Add APP URLS
+    path('admin/', admin.site.urls),
     path('api/', include('mtnpulseapp.urls')),
     path('api/', include('mixtapes.urls')),
     #Used to get the API Token Pair. The token and Refresh Token
@@ -35,7 +36,7 @@ urlpatterns = [
     #Used to check if the token is still valid
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     #Displays the Django Admin if it has not been specified in the URLS..Ensure it is the last path
-    path('', admin.site.urls),
+    ##path('', admin.site.urls),
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
