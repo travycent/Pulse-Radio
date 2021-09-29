@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'mtnpulse.wsgi.application'
 # replace variables accordingly
 if live_deploy == True:
     DEBUG = True
-    ALLOWED_HOSTS = ['mtnpulse.herokuapp.com']
+    ALLOWED_HOSTS = ['mtnpulse.herokuapp.com,172-31-34-37']
     DATABASES = {
         'default':
         {
