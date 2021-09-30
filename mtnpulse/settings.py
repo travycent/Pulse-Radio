@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%@7a7j-41an3us9y-44^nfc*el4s^21-=fvf2_9i-b6(bb3(h^'
+SECRET_KEY = 'KEY'
 
 # Application definition
 
@@ -76,15 +76,15 @@ WSGI_APPLICATION = 'mtnpulse.wsgi.application'
 # replace variables accordingly
 if live_deploy == True:
     DEBUG = True
-    ALLOWED_HOSTS = ['mtnpulse.herokuapp.com,172-31-34-37']
+    ALLOWED_HOSTS = ['*']
     DATABASES = {
         'default':
         {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'mtn_pulse_db',
-            'USER': 'root',
-            'PASSWORD': 'root',
-            'HOST': 'localhost',
+            'NAME': 'DB_NAME',
+            'USER': 'USERNAME',
+            'PASSWORD': 'PASSWORD',
+            'HOST': 'HOST',
             'PORT': '3306',
         }
     }
@@ -95,10 +95,10 @@ elif live_deploy == False:
         'default': 
         {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'mtn_pulse_db',
-            'USER': 'root',
-            'PASSWORD': 'root',
-            'HOST': 'localhost',
+            'NAME': 'DB_NAME',
+            'USER': 'USERNAME',
+            'PASSWORD': 'PASSWORD',
+            'HOST': 'HOST',
             'PORT': '3306',
         }
     }
